@@ -117,6 +117,8 @@ function Deck() {
       remove = removeCards;
     }
 
+    self.dealAllPlayersOut();
+
     if (self.players.length < 1) {
       console.error("Cannot distribute cards to 0 players.");
       return;
@@ -132,6 +134,26 @@ function Deck() {
     }
   };
 
+  self.dealPlayerOut = function(player) {
+    if (!player || typeof player === '') {
+      console.error("No player defined to deal out.");
+      return;
+    }
+    for (var i = 0; i < self.players.length; i++) {
+      if (self.players[i].name.toLowerCase() === player.toLowerCase()) {
+        self.cards = self.cards.concat(self.players[i].cards);
+        self.players[i].cards = [];
+      }
+    }
+  };
+
+  self.dealAllPlayersOut = function() {
+    for (var i = 0; i < self.players.length; i++) {
+      self.cards = self.cards.concat(self.players[i].cards);
+      self.players[i].cards = [];
+    }
+  };
+
   // Initiate a new deck
   self.newDeck();
 
@@ -142,6 +164,11 @@ function Deck() {
       for(var j, x, i = self.cards.length; i; j = parseInt(Math.random() * i), x = self.cards[--i], self.cards[i] = self.cards[j], self.cards[j] = x);
   };
 
+  self.reset = function() {
+    self.players = [];
+    self.newDeck();
+  };
+
   return {
     shuffle: self.shuffleDeck,
     cards: self.cards,
@@ -149,7 +176,8 @@ function Deck() {
     setPlayers: self.setPlayers,
     drawCard: self.drawCard,
     distributeEvenly: self.distributeEvenly,
-    getPlayersCards: self.getPlayersCards
+    getPlayersCards: self.getPlayersCards,
+    reset: self.reset
   }
 
 }

@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <script src="../src/deck-of-cards.js"></script>
+</head>
+<body>
+  <button data-bind="click: shuffle">Shuffle!</button>&nbsp;
+  <button data-bind="click: distribute">Distribute!</button>
+  <div data-bind="foreach: players">
+    <div>
+      <strong data-bind="text: name"></strong>
+      <div data-bind="foreach: cards">
+        <img style="width: 100px" data-bind="attr: { src: 'assets/images/cards/' + rank + '_of_' + suitVerbose + '.png' }">
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/javascript/knockout-3.4.0.js"></script>
+  <script>
+    function DeckViewModel() {
+      var self = this;
+
+      var deck = new Deck();
+      deck.shuffle();
+      deck.setPlayers(["Maebe", "Lucy", "Cali", "Wally", "Magoo", "Titus"]);
+
+      self.players = ko.observableArray(deck.players);
+
+      self.shuffle = function() {
+        deck.shuffle();
+      };
+
+      self.distribute = function() {
+        deck.distributeEvenly(3);
+        self.syncPlayers();
+      };
+
+      self.syncPlayers = function() {
+        self.players([]);
+        self.players(deck.players);
+        self.players.valueHasMutated();
+      };
+
+    };
+
+    ko.applyBindings(new DeckViewModel());
+  </script>
+</body>
+</html>
