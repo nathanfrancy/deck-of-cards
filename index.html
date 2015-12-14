@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <script src="deckOfCards.js"></script>
+</head>
+<body>
+  <div data-bind="foreach: players">
+    <div>
+      <strong data-bind="text: name"></strong>
+      <div data-bind="foreach: cards">
+        <img style="width: 100px" data-bind="attr: { src: 'cards/' + rank + '_of_' + suitVerbose + '.png' }">
+      </div>
+    </div>
+  </div>
+
+  <script src="knockout-3.4.0.js"></script>
+  <script>
+    var players = [
+      "Maebe", "Wally", "Lucy", "Magoo", "Cali", "Titus"
+    ];
+
+    var deck = new Deck();
+    deck.shuffle();
+    deck.setPlayers(players);
+    deck.distributeEvenly(2, false);
+
+    function DeckViewModel() {
+      var self = this;
+
+      self.players = ko.observableArray(deck.players);
+    }
+    ko.applyBindings(new DeckViewModel());
+  </script>
+</body>
+</html>
